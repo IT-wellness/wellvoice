@@ -1,0 +1,7 @@
+ai-voice-agent-backend/node_modules/*
+ai-voice-agent-backend/.env
+ai-voice-agent-backend/uploads/*
+ai-voice-agent-backend/package-lock.json
+
+ai-voice-agent-frontend/node_modules/*
+ai-voice-agent-frontend/package-lock.json
