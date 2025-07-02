@@ -1,11 +1,13 @@
-import React from 'react'
-import VoiceAgentWidget from './components/VoiceAgentWidget'
+import { VoiceCallProvider } from "./context/VoiceCallProvider";
+import CallBubble from "./components/CallBubble";
+import CallPanel from "./components/CallPanel";
 
 function App() {
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <VoiceAgentWidget />
-    </div>
+    <VoiceCallProvider>
+      <CallBubble />
+      <CallPanel />
+    </VoiceCallProvider>
   );
 }
 
