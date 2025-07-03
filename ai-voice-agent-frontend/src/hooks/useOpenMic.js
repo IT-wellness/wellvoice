@@ -37,9 +37,9 @@ export default function useOpenMic({ enabled, onBlob }) {
 
       const blob = new Blob(chunksRef.current, { type: mime });
       chunksRef.current = [];
-      if (blob.size > 100) onBlob(blob);  // ignore empty blips
+      if (blob.size > 100) onBlob(blob);
 
-      recRef.current = null;              // allow start() to create a new one
+      recRef.current = null;
     };
 
     /* ---------- VAD: stop only when genuinely recording --------------- */

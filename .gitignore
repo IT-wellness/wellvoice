@@ -5,3 +5,5 @@ ai-voice-agent-backend/package-lock.json
 
 ai-voice-agent-frontend/node_modules/*
 ai-voice-agent-frontend/package-lock.json
+
+WVB_Staging.pem

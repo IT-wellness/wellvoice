@@ -9,14 +9,8 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-/**
- * Send `userText` to an Assistant thread.
- * If no threadId is supplied, a new thread is created.
- * Returns { replyText, threadId }
- */
 const askAssistant = async (userText, existingThreadId = null) => {
   try {
-    /* 1️⃣  Ensure thread */
     let threadId = existingThreadId;
     if (!threadId) {
       const threadRes = await axios.post(
@@ -27,14 +21,12 @@ const askAssistant = async (userText, existingThreadId = null) => {
       threadId = threadRes.data.id;
     }
 
-    /* 2️⃣  Add user message */
     await axios.post(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       { role: "user", content: userText },
       { headers }
     );
 
-    /* 3️⃣  Run assistant */
     const runRes = await axios.post(
       `https://api.openai.com/v1/threads/${threadId}/runs`,
       { assistant_id: ASSISTANT_ID },
@@ -42,7 +34,6 @@ const askAssistant = async (userText, existingThreadId = null) => {
     );
     const runId = runRes.data.id;
 
-    /* 4️⃣  Poll until done (exponential back‑off) */
     let backoff = 1000;
     while (true) {
       await new Promise((r) => setTimeout(r, backoff));
@@ -53,10 +44,9 @@ const askAssistant = async (userText, existingThreadId = null) => {
       const status = statusRes.data.status;
       if (status === "completed") break;
       if (status === "failed")   throw new Error("Assistant run failed.");
-      backoff = Math.min(backoff * 1.4, 4000); // cap at 4 s
+      backoff = Math.min(backoff * 1.4, 4000);
     }
 
-    /* 5️⃣  Fetch assistant reply */
     const msgRes = await axios.get(
       `https://api.openai.com/v1/threads/${threadId}/messages`,
       { headers }

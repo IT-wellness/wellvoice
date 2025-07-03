@@ -1,4 +1,3 @@
-/* PLAY MP3 BUFFER --------------------------------------------------------- */
 export function playAudio(buffer) {
   return new Promise((resolve) => {
     const url   = URL.createObjectURL(new Blob([buffer], { type: "audio/mpeg" }));
@@ -9,19 +8,12 @@ export function playAudio(buffer) {
   });
 }
 
-/* VAD HELPER -------------------------------------------------------------- */
-/**
- * startWithVAD({ stream, onSilence, threshold?, silenceMs? })
- *  • Monitors `stream` volume (RMS).  
- *  • Calls `onSilence()` after `silenceMs` of volume below `threshold`.  
- *  • Returns a cleanup fn you must call to stop analysing.
- */
 export function startWithVAD({
   stream,
   onSilence,
   threshold = 4,
   silenceMs = 1500,
-  minSpeechMs = 300   // NEW: must speak this long before silence counts
+  minSpeechMs = 300
 }) {
   const ctx = new AudioContext();
   const source = ctx.createMediaStreamSource(stream);
@@ -43,14 +35,14 @@ export function startWithVAD({
     const now = Date.now();
 
     if (rms < threshold) {
-      // silence *after* we have detected real speech
+      
       if (speechStart && now - speechStart > minSpeechMs) {
         if (!silenceTimer) {
           silenceTimer = setTimeout(() => !stopped && onSilence?.(), silenceMs);
         }
       }
     } else {
-      // user is speaking
+      
       speechStart = speechStart || now;
       clearTimeout(silenceTimer);
       silenceTimer = null;

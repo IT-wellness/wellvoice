@@ -1,20 +1,18 @@
-/* src/components/VoiceAgentWidget.jsx — hands‑free call version */
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const SILENCE_THRESHOLD = 4;      // lower → more sensitive
-const SILENCE_MS        = 1500;   // pause length before auto‑stop
-const MIN_SPEECH_MS     = 300;    // ignore <300 ms blips
-const TIMESLICE_MS      = 1000;   // MediaRecorder chunk size
+const SILENCE_THRESHOLD = 4;
+const SILENCE_MS        = 1500;
+const MIN_SPEECH_MS     = 300;
+const TIMESLICE_MS      = 1000;
 
 export default function VoiceAgentWidget() {
-  /* UI & session state */
+  
   const [open,      setOpen]      = useState(false);
   const [recording, setRecording] = useState(false);
   const [loading,   setLoading]   = useState(false);
   const [threadId,  setThreadId]  = useState(null);
 
-  /* refs */
   const mediaRecRef   = useRef(null);
   const chunksRef     = useRef([]);
   const streamRef     = useRef(null);
@@ -22,7 +20,6 @@ export default function VoiceAgentWidget() {
   const minSpeechRef  = useRef(null);
   const controlRef    = useRef({ start: () => {}, stop: () => {} });
 
-  /* Boot mic + analyser once panel opens */
   useEffect(() => {
     if (!open) return;
 
@@ -45,9 +42,9 @@ export default function VoiceAgentWidget() {
         const blob = new Blob(chunksRef.current, { type: mime });
         chunksRef.current = [];
         setLoading(true);
-        await sendAudio(blob);   // STT ➜ Assistant ➜ TTS
+        await sendAudio(blob);
         setLoading(false);
-        if (open) controlRef.current.start(); // reopen mic
+        if (open) controlRef.current.start();
       };
 
       /* ------- Web‑audio analyser (VAD) ------- */
@@ -91,13 +88,13 @@ export default function VoiceAgentWidget() {
 
       const stop = () => {
         rec.requestData();
-        setTimeout(() => rec.stop(), 200); // flush final chunk
+        setTimeout(() => rec.stop(), 200);
         setRecording(false);
         clearTimeout(vadTimerRef.current);
       };
 
       controlRef.current = { start, stop };
-      start(); // initial start
+      start();
     })();
 
     return () => {

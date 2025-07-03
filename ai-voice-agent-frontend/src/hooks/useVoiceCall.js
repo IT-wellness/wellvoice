@@ -31,7 +31,6 @@ export default function useVoiceCall({ enabled, onHangUp }) {
       await playAudio(buf);
     } finally {
       setBusy(false);
-      /* 🔁 Re‑open mic once, after TTS, if call still active */
       if (enabled) micControlRef.current?.start();
     }
   };
