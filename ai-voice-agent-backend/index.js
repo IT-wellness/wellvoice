@@ -6,7 +6,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import voiceRoutes from './routes/voiceRoute.js';
-import errorHandler from './middleware/errorHandler.js'; // Custom error middleware
+import errorHandler from './middlewares/errorHandler.js'; // Custom error middleware
 
 // Initialize Express app
 const app = express();
