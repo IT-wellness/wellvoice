@@ -34,7 +34,7 @@ app.use('/api/telnyx', telnyxWebhook);
 
 // Health check route
 app.get('/', (req, res) => {
-  res.send({ status: 'OK', message: 'AI Voice Agent Backend is running.' });
+  res.send({ status: 'OK', message: 'AI Voice Agent Backend is running...' });
 });
 
 // Use centralized error handler
